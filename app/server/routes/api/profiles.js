@@ -186,4 +186,38 @@ router.delete('/', auth, async (req, res) => {
     }
 });
 
+
+// @route   PUT api/profiles/experience
+// @desc    Add experience to the current use
+// @access  Private
+router.put('/experience', [auth, 
+    [
+        check('title', 'Title is required.').notEmpty(),
+        check('company', 'Company is required').notEmpty(),
+        check('from', 'From date is required.').notEmpty(),
+    ]], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const exp = { title, company, location, from, to, current, description } = req.body;
+
+    try {
+        const profile = await Profile.findOne({ user: req.user.id });
+        if (!profile) {
+            return res.send({ message: "Invalid credentials!" }); // authorization succeeded but user doesn't exist
+        }
+        // put new experience at the beginning so that the latest experience will be on the top
+        // When rendering user's experiences, however, we might want to sort data by working date
+        // to ensure the chronological consistency
+        profile.experience.unshift(exp);
+        await profile.save();
+        res.json(profile);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send(err);
+    }
+});
+
 module.exports = router; 
