@@ -88,7 +88,7 @@ router.post('/', [auth, [
             await profile.save();
             res.json(profile);
         } catch (err) {
-            console.log(err.message);
+            console.error(err.message);
             res.status(500).send('Server error!');
         }
     }
@@ -128,6 +128,62 @@ router.get('/user/:user_id', async (req, res) => {
         }
         res.status(500).send('Server Error!');
     }
-})
+});
+
+// @route   DELETE api/profiles
+// @desc    Delete profile & user given authorized user
+// @access  Private
+router.delete('/', auth, async (req, res) => {
+    try {
+        // Profile.findByIdAndDelete(req.params.id, err => {
+        //     if (err) return res.status(400).send(`Could not delete profile with associated id: ${req.params.id}`);
+        //     res.status(410).send(`Successfully deleted profile id: ${req.params.id}`);
+        // });
+
+        // remove profile
+
+        const deletedProfile = await Profile.findOneAndDelete({ user: req.user.id });
+        if (!deletedProfile) {
+            return res.status(500).json({
+                message: 'Invalid delete request.',
+            });
+        }
+
+        res.json({ message: 'Sucessfully deleted profile!' });
+        // const deletedUser = 
+
+        // console.log(req.user.id);
+        // console.log(req.user);
+        // await Profile.findOneAndDelete({ user: req.user.id }).then(profile => {
+        //     res.json({
+        //         'message': `Succesfully deleted profile ${profile._id}`, 
+        //         'profile': profile
+        //     });
+        // }).catch(err => {
+        //     res.status(500).json({
+        //         'message': 'Invalid credentials.',
+        //         'error': err
+        //     });
+        // });
+        
+        // await User.findOneAndDelete({ _id: req.user.id }).then(user => {
+        //     res.json({
+        //         'message': `Succesfully deleted user ${user.id}`, 
+        //         'user': user
+        //     });
+        // }).catch(err => {
+        //     res.status(500).json({
+        //         'message': 'Invalid credentials.',
+        //         'error': err
+        //     });
+        // });
+        // remove associated user
+        // await User.findOneAndRemove({ _id: req.user.id }).then(doc);
+        // res.json({ message: 'Sucessfully deleted!' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send(err);
+    }
+});
 
 module.exports = router; 
