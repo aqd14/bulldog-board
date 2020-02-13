@@ -18,13 +18,13 @@ node_js:
 
 cache:
     directories:
-        - node_modules
+        - npm
 
 # before_install:
 #     - sudo apt-get install -y libxml2-dev
     
 install:
-    - npm --prefix ./app/server ci
+    - cd ./app/server && npm ci
 
 script:
     - npm run test-ci
