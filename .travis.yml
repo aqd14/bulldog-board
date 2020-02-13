@@ -7,24 +7,16 @@ language:
 node_js:
     - '13'
 
-# dist: 
-#     trusty
-    
-# service:
-#     mongodb
-
-# env:
-#     - NODE_ENV=ci PORT=5000
-
 cache:
     directories:
-        - npm
+        - ./app/server/node_modules
 
-# before_install:
-#     - sudo apt-get install -y libxml2-dev
+before_install:
+    - cd ./app/server
+    # - sudo apt-get install -y libxml2-dev
     
 install:
-    - cd ./app/server && npm ci
+    - npm ci
 
 script:
     - npm run test-ci
