@@ -2,5 +2,6 @@
 
 module.exports = {
     PASSWORD_TOO_SHORT: 'Please enter a password with 6 or more characters.',
-    SERVER_ERROR: 'Server error!'
+    SERVER_ERROR: 'Server error!',
+    EMAIL_EXIST: 'Email already exists. Cannot create new user!'
 }

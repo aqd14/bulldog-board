@@ -94,4 +94,39 @@ describe('Test REST APIs for User route', function () {
         });
     });
 
+    it('POST api/users -- register new user failed due to existing email)', function (done) {
+        const user = {
+            name: "Iron Man",
+            email: "ironman@marvel.com",
+            password: "StrongPassword"
+        };
+
+        request(app).post('/api/users')
+        .send(user)
+        .end(async function(err, res) {
+            expect(res.status).to.equal(200);
+            expect(res.body.token).to.not.equal(null);
+            // console.log(res);
+            // expect(res.body.token).to.not.equal(null);
+            // verify if the user doesn't exist in database
+            await User.findOne( {email: user.email }, function(err, lookupUser){
+                expect(lookupUser).to.not.equal(null);
+            });
+
+            const newUser = {
+                name: "Captain America",
+                email: "ironman@marvel.com",
+                password: "VeryStrongPassword"
+            };
+            
+            request(app).post('/api/users')
+            .send(newUser)
+            .end(function(err, res) {
+                expect(res.status).to.be.equal(400);
+                expect(res.body.errors[0].message).to.be.equal(message.EMAIL_EXIST);
+                done();
+            });
+        });
+    });
+
 });
