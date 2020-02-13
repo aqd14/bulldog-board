@@ -4,8 +4,10 @@ const { check, validationResult } = require('express-validator');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const message = require('../../utils/message');
 // const config = require('config');
-require('dotenv').config({ path: '../.env'});
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, `../.env.${process.env.ENVIRONMENT}`)});
 
 const User = require('../../models/Users');
 
@@ -16,7 +18,7 @@ router.post('/', [
         check('name', "Name is required")
         .notEmpty(),
         check('email', 'Please include a valid email address').isEmail(),
-        check('password', 'Please enter a password with 6 or more characters')
+        check('password', message.PASSWORD_TOO_SHORT)
         .isLength({
             min: 6
         })

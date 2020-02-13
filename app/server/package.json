@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ENVIRONMENT=local node server",
     "server": "ENVIRONMENT=local nodemon server",
-    "test": "ENVIRONMENT=test.local mocha --recursive --exit"
+    "test": "ENVIRONMENT=test.local mocha --recursive --exit",
+    "test-ci": "mocha --recursive --exit"
   },
   "keywords": [
     "MERN"
