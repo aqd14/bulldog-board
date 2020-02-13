@@ -1,5 +1,7 @@
 const express = require('express')
 const connectDB = require('./config/db')
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, `../.env.${process.env.ENVIRONMENT}`)});
 
 const app = express();
 
@@ -18,3 +20,5 @@ app.get('/', (req, res) => res.send('API Running!'));
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server server started on port ${PORT}`));
+
+module.exports = app;
