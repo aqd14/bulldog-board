@@ -24,7 +24,7 @@ cache:
 #     - sudo apt-get install -y libxml2-dev
     
 install:
-    - npm --prefix ./app/server ci ./app/server
+    - npm --prefix ./app/server ci
 
 script:
     - npm run test-ci
