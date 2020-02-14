@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ENVIRONMENT=local node server",
     "server": "ENVIRONMENT=local nodemon server",
-    "test": "ENVIRONMENT=test.local mocha --recursive --exit",
+    "test": "ENVIRONMENT=test.local nyc mocha --recursive --exit",
     "test-ci": "mocha --recursive --exit"
   },
   "keywords": [
@@ -30,6 +30,7 @@
     "concurrently": "^5.1.0",
     "mocha": "^7.0.1",
     "nodemon": "^2.0.2",
+    "nyc": "^15.0.0",
     "supertest": "^4.0.2"
   }
 }

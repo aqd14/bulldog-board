@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# test coverage report
+.nyc_output
+
 # dependencies
 /node_modules
 /.pnp
