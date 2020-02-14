@@ -7,7 +7,8 @@
     "start": "ENVIRONMENT=local node server",
     "server": "ENVIRONMENT=local nodemon server",
     "test": "ENVIRONMENT=test.local nyc mocha --recursive --exit",
-    "test-ci": "mocha --recursive --exit"
+    "test-ci": "nyc mocha --recursive --exit",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "MERN"
