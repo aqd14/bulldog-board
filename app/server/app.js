@@ -19,6 +19,8 @@ const PORT = process.env.PORT || 5000;
 
 connectDB().then(async () => {
     app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+}).catch(async () => {
+    console.error('Cannot connect with db...');
 });
 
 module.exports = app;
