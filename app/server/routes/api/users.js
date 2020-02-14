@@ -15,9 +15,8 @@ const User = require('../../models/Users');
 // @desc    Create new user
 // @access  Public
 router.post('/', [
-        check('name', "Name is required")
-        .notEmpty(),
-        check('email', 'Please include a valid email address').isEmail(),
+        check('name', message.NAME_REQUIRED).notEmpty(),
+        check('email', message.INVALID_EMAIL).isEmail(),
         check('password', message.PASSWORD_TOO_SHORT)
         .isLength({
             min: 6
@@ -78,7 +77,7 @@ router.post('/', [
             // add user to database
         } catch (err) {
             console.error(err.message);
-            res.status(500).send('Server Error!!!');
+            res.status(500).send(message.SERVER_ERROR);
         }
     });
 

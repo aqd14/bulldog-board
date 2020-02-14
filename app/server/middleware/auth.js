@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const message = require('../utils/message');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, `../.env.${process.env.ENVIRONMENT}`)});
 
@@ -7,7 +8,7 @@ module.exports = (req, res, next) => {
     const token = req.header('x-auth-token');
     
     if (!token) {
-        return res.status(401).json({ message: 'No token, authorization denined!' });
+        return res.status(401).json({ message: message.EMPTY_TOKEN });
     }
 
     // Verify token
@@ -16,6 +17,6 @@ module.exports = (req, res, next) => {
         req.user = decoded.user;
         next();
     } catch (error) {
-        res.status(401).json({ message: 'Token is not valid!' });
+        res.status(401).json({ message: message.INVALID_TOKEN });
     }
 }

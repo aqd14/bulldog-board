@@ -3,7 +3,9 @@ const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-require('dotenv').config('../.env.local');
+const message = require('../../utils/message');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, `../.env.${process.env.ENVIRONMENT}`)});
 
 const User = require('../../models/Users');
 const router = express.Router();
@@ -16,7 +18,7 @@ router.get('/', auth, async (req, res) => {
         const user = await User.findById(req.user.id).select('-password');
         res.json(user);
     } catch (err) {
-        return res.status(500).send({ message: 'Could not retrieve user from database' });
+        return res.status(500).send({ message: message.SERVER_ERROR});
     }
 });
 
@@ -24,11 +26,9 @@ router.get('/', auth, async (req, res) => {
 // @desc    Authenticate user and get token
 // @access  Public
 router.post('/', [
-        check('email', 'Please include a valid email.')
-        .notEmpty()
-        .isEmail(),
-        check('password', 'Password is required.')
-        .exists()
+        check('email', message.INVALID_EMAIL).isEmail(),
+        check('email', message.EMAIL_REQUIRED).exists(),
+        check('password', message.PASSWORD_REQUIRED).exists()
     ],
     async (req, res) => {
         const errors = validationResult(req);
@@ -45,14 +45,14 @@ router.post('/', [
             let user = await User.findOne({ email });
             if (!user) {
                 // console.error('could not find user with given email.');
-                return res.status(400).json({ message: 'Invalid creadentials.'});
+                return res.status(400).json({ message: message.INVALID_CREDENTIALS});
             }
 
             // compare the plain password sent to server with stored hashed password in database
             console.log(password, user.password)
             const isPasswordMatched = await bcrypt.compare(password, user.password);
             if (!isPasswordMatched) {
-                return res.status(400).json({ message: 'Invalid creadentials.'});
+                return res.status(400).json({ message: message.INVALID_CREDENTIALS});
             }
             
             const payload = {
@@ -73,7 +73,7 @@ router.post('/', [
 
         } catch (err) {
             console.error(err.message);
-            res.status(500).send('Server Error!!!');
+            res.status(500).send(message.SERVER_ERROR);
         }
     }
 )
