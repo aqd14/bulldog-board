@@ -7,22 +7,14 @@ require('dotenv').config({ path: path.resolve(__dirname, `../.env.${process.env.
 
 // console.log(process.env.MONGOOSE_URI);
 
-const db = process.env.MONGOOSE_URI; // config.get("mongoURI");
-
 const connectDB = async () => {
-    try {
-        await mongoose.connect(db, 
-            {
-                useCreateIndex: true,
-                useUnifiedTopology: true,
-                useNewUrlParser: true,
-                useFindAndModify: false
-            });
-        console.log("MongodB Connected...");
-    } catch (err) {
-        console.error(err);
-        process.exit(1);
-    }
+    console.log("Connecting MongoDB...");
+    await mongoose.connect(process.env.MONGOOSE_URI, {
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        useFindAndModify: false
+    });
 };
 
 module.exports = connectDB;
