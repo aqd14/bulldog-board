@@ -21,3 +21,38 @@ The website also incorporates modern frameworks/libraries/tools to make developm
 * [`mocha`](https://mochajs.org), [`supertest`](https://github.com/visionmedia/supertest), [`chai`](https://www.chaijs.com): for automated integration testing
 * [`travis_ci`](https://travis-ci.com): for continuous integration, both for testing and deployment
 * [`nyc`](https://github.com/istanbuljs/nyc) and [`coveralls`](https://coveralls.io): test coverage
+
+## Scripts
+_Create configuration file_:
+```
+cd ./app/server 
+touch .env.local
+
+# add following environment variable to the file:
+MONGOOSE_URI=your_mongodb_uri
+JWT_SECRET=your_secret
+PORT=your_server_port
+```
+
+_Start server_:
+```
+npm run start
+```
+
+_Run test_:
+```
+# create .env.test.local to avoid database and port conflict with running server
+touch .env.local
+
+# add following environment variable to the file:
+MONGOOSE_URI=your_mongodb_test_uri
+JWT_SECRET=your_test_secret
+PORT=your_test_server_port
+
+npm run test
+```
+
+_Check eslint style_:
+```
+npm run lint
+```
