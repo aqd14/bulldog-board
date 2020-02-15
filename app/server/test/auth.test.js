@@ -17,17 +17,18 @@ describe('Test REST APIs for Authorization route', function () {
   }
 
   // get the token for registered user
-  before(function(done) {
+  before(function (done) {
     api.post('/api/users')
       .send(user)
       .expect(200)
       .end(function (err, res) {
         if (err) return done(err);
+
         expect(res.body).to.have.property('token');
         expect(res.body.token).to.not.equal(null);
         token = res.body.token;
         done();
-    });
+      });
   });
 
   after(async function () {
@@ -82,7 +83,7 @@ describe('Test REST APIs for Authorization route', function () {
       email: user.email,
       password: user.password
     }
-    
+
     api.post('/api/auth')
       .send(data)
       .expect(200)
@@ -129,14 +130,14 @@ describe('Test REST APIs for Authorization route', function () {
 
   it('POST api/auth -- failed login due to missing password', function (done) {
     const data = {
-      email: user.email,
+      email: user.email
     }
     api.post('/api/auth')
       .send(data)
       .expect(400)
       .end(function (err, res) {
         if (err) return done(err);
-        
+
         expect(res.body.errors[0].msg).to.equal(message.PASSWORD_REQUIRED);
         done();
       });
@@ -152,7 +153,7 @@ describe('Test REST APIs for Authorization route', function () {
       .expect(400)
       .end(function (err, res) {
         if (err) return done(err);
-        
+
         expect(res.body.message).to.equal(message.INVALID_CREDENTIALS);
         done();
       });
@@ -168,7 +169,7 @@ describe('Test REST APIs for Authorization route', function () {
       .expect(400)
       .end(function (err, res) {
         if (err) return done(err);
-        
+
         expect(res.body.message).to.equal(message.INVALID_CREDENTIALS);
         done();
       });
