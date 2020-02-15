@@ -15,10 +15,10 @@ const router = express.Router()
 // @access  Public
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password')
-    res.json(user)
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
   } catch (err) {
-    return res.status(500).send({ message: message.SERVER_ERROR })
+    return res.status(500).send({ message: message.SERVER_ERROR });
   }
 })
 
@@ -31,28 +31,28 @@ router.post('/', [
   check('password', message.PASSWORD_REQUIRED).exists()
 ],
 async (req, res) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
       errors: errors.array()
-    })
+    });
   }
 
-  const { email, password } = req.body
+  const { email, password } = req.body;
 
   try {
     // console.log(email);
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email });
     if (!user) {
       // console.error('could not find user with given email.');
-      return res.status(400).json({ message: message.INVALID_CREDENTIALS })
+      return res.status(400).json({ message: message.INVALID_CREDENTIALS });
     }
 
     // compare the plain password sent to server with stored hashed password in database
-    console.log(password, user.password)
-    const isPasswordMatched = await bcrypt.compare(password, user.password)
+    // console.log(password, user.password)
+    const isPasswordMatched = await bcrypt.compare(password, user.password);
     if (!isPasswordMatched) {
-      return res.status(400).json({ message: message.INVALID_CREDENTIALS })
+      return res.status(400).json({ message: message.INVALID_CREDENTIALS });
     }
 
     const payload = {
@@ -66,15 +66,14 @@ async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: 36000 },
       (err, token) => {
-        if (err) throw err
-        res.json({ token })
+        if (err) throw err;
+        res.json({ token });
       }
     )
   } catch (err) {
-    console.error(err.message)
-    res.status(500).send(message.SERVER_ERROR)
+    console.error(err.message);
+    res.status(500).send(message.SERVER_ERROR);
   }
-}
-)
+})
 
-module.exports = router
+module.exports = router;

@@ -14,11 +14,11 @@ describe('Test REST APIs for User route', function () {
     // runs after all tests in this block
     await User.deleteMany({}, function (err) {
       if (err) {
-        console.error(err.stack)
+        console.error(err.stack);
       } else {
-        console.log('Sucessfully cleared User collection!')
+        console.log('Sucessfully cleared User collection!');
       }
-    })
+    });
   })
 
   // beforeEach(function() {
