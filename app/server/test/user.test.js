@@ -5,10 +5,13 @@ const app = require('../app')
 const User = require('../models/Users')
 const message = require('../utils/message')
 
+const api = request(app);
+
 describe('Test REST APIs for User route', function () {
-  before(function () {
-    // runs before all tests in this block
-  })
+  // before(async function () {
+  //   // runs before all tests in this block
+  //   await app.on('ServerStarted', () => {});
+  // })
 
   after(async function () {
     // runs after all tests in this block
@@ -40,20 +43,20 @@ describe('Test REST APIs for User route', function () {
       email: 'bobdylan@gmail.com',
       password: 'abc123'
     }
-    request(app).post('/api/users')
+    api.post('/api/users')
       .send(user)
       .end(async function (err, res) {
-        if (err) return done(err)
+        if (err) return done(err);
 
-        expect(res.status).to.equal(200)
-        expect(res.body).to.have.property('token')
-        expect(res.body.token).to.not.equal(null)
+        expect(res.status).to.equal(200);
+        expect(res.body).to.have.property('token');
+        expect(res.body.token).to.not.equal(null);
         // verify if the user has been created in database
         await User.findOne({ email: user.email }, function (err, lookupUser) {
-          if (err) return done(err)
+          if (err) return done(err);
 
-          expect(lookupUser).to.not.equal(null)
-          done()
+          expect(lookupUser).to.not.equal(null);
+          done();
         })
       })
   })
@@ -64,19 +67,19 @@ describe('Test REST APIs for User route', function () {
       email: 'bobdylan.gmail.com',
       password: 'abc123'
     }
-    request(app).post('/api/users')
+    api.post('/api/users')
       .send(user)
       .end(async function (err, res) {
-        if (err) return done(err)
+        if (err) return done(err);
 
-        expect(res.status).to.equal(400)
+        expect(res.status).to.equal(400);
         // expect(res.body.token).to.not.equal(null);
         // verify if the user doesn't exist in database
         await User.findOne({ email: user.email }, function (err, lookupUser) {
-          if (err) return done(err)
+          if (err) return done(err);
 
           expect(lookupUser).to.equal(null)
-          done()
+          done();
         })
       })
   })
@@ -87,21 +90,21 @@ describe('Test REST APIs for User route', function () {
       email: 'johnlenon@gmail.com',
       password: 'short'
     }
-    request(app).post('/api/users')
+    api.post('/api/users')
       .send(user)
       .end(async function (err, res) {
-        if (err) return done(err)
+        if (err) return done(err);
 
-        expect(res.status).to.equal(400)
-        expect(res.body.errors[0].msg).to.be.equal(message.PASSWORD_TOO_SHORT)
+        expect(res.status).to.equal(400);
+        expect(res.body.errors[0].msg).to.be.equal(message.PASSWORD_TOO_SHORT);
         // console.log(res);
         // expect(res.body.token).to.not.equal(null);
         // verify if the user doesn't exist in database
         await User.findOne({ email: user.email }, function (err, lookupUser) {
-          if (err) return done(err)
+          if (err) return done(err);
 
-          expect(lookupUser).to.equal(null)
-          done()
+          expect(lookupUser).to.equal(null);
+          done();
         })
       })
   })
@@ -113,19 +116,19 @@ describe('Test REST APIs for User route', function () {
       password: 'StrongPassword'
     }
 
-    request(app).post('/api/users')
+    api.post('/api/users')
       .send(user)
       .end(async function (err, res) {
-        if (err) return done(err)
+        if (err) return done(err);
 
-        expect(res.status).to.equal(200)
-        expect(res.body.token).to.not.equal(null)
+        expect(res.status).to.equal(200);
+        expect(res.body.token).to.not.equal(null);
         // console.log(res);
         // expect(res.body.token).to.not.equal(null);
         // verify if the user doesn't exist in database
         await User.findOne({ email: user.email }, function (err, lookupUser) {
-          if (err) return done(err)
-          expect(lookupUser).to.not.equal(null)
+          if (err) return done(err);
+          expect(lookupUser).to.not.equal(null);
         })
 
         const newUser = {
@@ -134,14 +137,14 @@ describe('Test REST APIs for User route', function () {
           password: 'VeryStrongPassword'
         }
 
-        request(app).post('/api/users')
+        api.post('/api/users')
           .send(newUser)
           .end(function (err, res) {
-            if (err) return done(err)
+            if (err) return done(err);
 
-            expect(res.status).to.be.equal(400)
-            expect(res.body.errors[0].message).to.be.equal(message.EMAIL_EXIST)
-            done()
+            expect(res.status).to.be.equal(400);
+            expect(res.body.errors[0].message).to.be.equal(message.EMAIL_EXIST);
+            done();
           })
       })
   })
